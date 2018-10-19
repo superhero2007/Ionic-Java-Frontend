@@ -1,0 +1,55 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Book</ion-title>
+        <ion-buttons start>
+            <button ion-button (click)="cancel()">
+                <span color="primary" showWhen="ios">
+                  {{ 'CANCEL_BUTTON' | translate }}
+                </span>
+                <ion-icon name="md-close" showWhen="core,android,windows"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-buttons end>
+            <button ion-button (click)="done()" [disabled]="!isReadyToSave" strong>
+                <span color="primary" showWhen="ios">
+                    {{ 'DONE_BUTTON' | translate }}
+                </span>
+                <ion-icon name="md-checkmark" showWhen="core,android,windows"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>
+    <form *ngIf="form" [formGroup]="form" (ngSubmit)="save()">
+        <ion-list>
+            <ion-item [hidden]="!form.id">
+                <ion-label>ID</ion-label>
+                <ion-input type="hidden" id="id" formControlName="id" readonly></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-input type="text" placeholder="Title" formControlName="title"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-input type="text" placeholder="Genre" formControlName="genre"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-input type="text" placeholder="Language" formControlName="language"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-input type="number" placeholder="Year" formControlName="year"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>Author</ion-label>
+                <ion-select id="field_author" formControlName="author" [compareWith]="compareAuthor" required>
+                    <ion-option *ngIf="!form.value.author" [value]="null" selected></ion-option>
+                    <ion-option [value]="authorOption" *ngFor="let authorOption of authors; trackBy: trackAuthorById">{{authorOption.lastName}}</ion-option>
+                </ion-select>
+            </ion-item>
+            <div [hidden]="!(form.controls.author?.dirty && form.controls.author?.invalid)">
+                <small [hidden]="!form.controls.author?.errors?.required">
+                    This field is required.
+                </small>
+            </div>
+        </ion-list>
+    </form>
+</ion-content>
